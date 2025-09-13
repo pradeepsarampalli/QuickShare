@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="img/data-sharing.png" />
+    <title>Quick Share</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: sans-serif;
+      }
+      .main {
+        width: 600px;
+        height: 600px;
+        background-color: beige;
+        border: 1px solid #00934b;
+        border-radius: 8px;
+      }
+      .nav {
+        display: flex;
+        width: 100%;
+      }
+      .nav__left {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        padding-left: 20px;
+        width: 250px;
+      }
+      .nav__logo {
+        width: 50px;
+        height: 50px;
+      }
+      .nav__right {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: auto;
+      }
+      .nav__links {
+        display: flex;
+        gap: 10px;
+        padding-right: 20px;
+        width: 100%;
+      }
+      .nav__links li {
+        list-style: none;
+      }
+      .nav__links li a {
+        text-decoration: none;
+        color: rgb(15, 15, 15);
+        transition: 0.15s ease-in-out;
+      }
+      .nav__links li a:hover {
+        border-bottom: 1px solid black;
+      }
+      .login__button {
+        border: 1px solid green;
+        padding: 5px;
+        background-color: #07c34f;
+        color: white;
+        font-weight: bold;
+        border-radius: 5px;
+      }
+      .login__button:hover {
+        opacity: 0.8;
+      }
+      .send__file {
+        width: 600px;
+        height: 530px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+        background-color: #ffffff;
+        flex-direction: column;
+        border-radius: 8px;
+      }
+      .send_section {
+        width: 290px;
+        height: 230px;
+        padding: 15px;
+        background-color: beige;
+        border-radius: 10px;
+        position: relative;
+      }
+      .upload_button {
+        position: absolute;
+        bottom: 10px;
+        left: 110px;
+        background-color: #07c34f;
+        color: white;
+        font-weight: bold;
+        border: none;
+        padding: 7px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+      input[type='file'] {
+        width: 290px;
+        height: 160px;
+        opacity: 0;
+        z-index: 3;
+        cursor: pointer;
+        position: absolute;
+      }
+      .send_section h2 {
+        position: absolute;
+        z-index: 2;
+      }
+      .send_section img {
+        width: 50px;
+        position: relative;
+        top: 80px;
+        left: 120px;
+        z-index: 2;
+      }
+      .recieve_section {
+        width: 290px;
+        padding: 20px;
+        background-color: beige;
+        border-radius: 10px;
+      }
+      .recieve_section input {
+        width: 280px;
+        height: 30px;
+        border: none;
+        border-radius: 5px;
+        padding-left: 5px;
+        position: absolute;
+      }
+      .recieve_section input:focus {
+        outline: none;
+      }
+      .recieve_section img {
+        width: 25px;
+        position: relative;
+        top: 5px;
+        left: 250px;
+        z-index: 2;
+      }
+      /* .download_button{
+            width: 25px;
+            position: relative;
+            top: 5px;
+            left: 250px;
+            opacity: 0;
+            z-index: 1;
+        } */
+      #result_section {
+        position: absolute;
+        bottom: 30px;
+        left: 76px;
+      }
+      #timer_section {
+        position: absolute;
+        padding-top: 10px;
+        bottom: 50px;
+        left: 80px;
+      }
+      /* #copybutton{
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            right: 30px;
+            bottom: 30px;
+        } */
+      .hidden {
+        display: none;
+      }
+      .status__ui {
+        width: 300px;
+        height: 200px;
+      }
+      .status__ui p {
+        display: inline;
+      }
+      #input_download {
+        height: 35px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <nav class="nav">
+        <div class="nav__left">
+          <img class="nav__logo" src="img/data-sharing.png" />
+          <h1>QuickShare</h1>
+        </div>
+        <div class="nav__right">
+          <ul class="nav__links">
+            <!-- <li><label>Welcome! ,<span class="user_name">Pradeep</span></label></li> -->
+            <li><a class="login__button" href="login.html">Login</a></li>
+          </ul>
+        </div>
+      </nav>
+      <form class="send__file" enctype="multipart/form-data">
+        <div class="send_section">
+          <div class="upload__ui">
+            <h2>Send File</h2>
+            <input type="file" name="input-file" id="input_file" />
+            <img src="img/upload.png" />
+            <div class="hidden file_status">
+              <p id="result_section">Your code : ********</p>
+              <p id="timer_section">File Expires in : <span id="timer"></span></p>
+            </div>
+          </div>
+          <div class="status__ui hidden">
+            <label>Selected:</label>
+            <br />
+            <label>filename:</label>
+            <label id="filename"></label>
+            <br />
+            <label>filesize:</label>
+            <label id="filesize"></label>
+            <br />
+            <label>filetype:</label>
+            <label id="filetype"></label>
+          </div>
+          <button class="upload_button">Upload a File</button>
+        </div>
+        <div class="recieve_section">
+          <h2>Recieve File</h2>
+          <input type="text" placeholder="Enter Unique Code:" id="input_download" />
+          <img class="download_button" src="img/download.png" />
+        </div>
+      </form>
+    </div>
+    <script>
+      const uploadBtn = document.querySelector('.upload_button');
+      const inputFile = document.querySelector('#input_file');
+      const updateUi = document.querySelector('.send_section');
+
+      //eventlistener for uplaod button
+      uploadBtn.addEventListener('click', async e => {
+        e.preventDefault();
+
+        //loading first selected file
+        const file = inputFile.files[0];
+        //generating a random unique
+        const code = Math.random().toString(36).substring(2, 10).toUpperCase();
+
+        //formatData - storing all spost data on this and sending
+        const formData = new FormData();
+        //appending data to formatData
+        formData.append('file', file);
+        formData.append('code', code);
+        try {
+          //getting token from local storage and sending to server to verify access
+          const token = localStorage.getItem('jwt');
+          const res = await fetch('http://localhost:3000/upload', {
+            method: 'POST',
+            headers: {
+              Authorization: `${token}`,
+            },
+            body: formData,
+          });
+          document.querySelector('.upload__ui').classList.remove('hidden');
+          document.querySelector('.status__ui').classList.add('hidden');
+          const data = await res.json();
+          if (data.status === 'ok') {
+            document.querySelector('.file_status').classList.remove('hidden');
+            
+            //timer for file expiry
+            const timerEl = document.getElementById('timer');
+            const codeEl = document.getElementById('result_section');
+            let timeLeft = 300; 
+            const intervalId = setInterval(() => {
+              if (timeLeft <= 0) {
+                clearInterval(intervalId);
+                timerEl.textContent = 'File has expired!';
+                document.getElementById('timer_section').classList.add('hidden');
+                codeEl.classList.add('hidden');
+                return;
+              }
+              const minutes = Math.floor(timeLeft / 60);
+              const seconds = timeLeft % 60;
+              timerEl.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2,'0')}`;
+              timeLeft--;
+            }, 1000);
+
+            codeEl.innerHTML = `Your code: ${code}`;
+            filename.textContent = '';
+            // uploadBtn.addEventListener('click', () => {
+            //   window.location.href='/';
+            // });
+          }
+        } catch (err) {
+          alert('Failed to upload files!')
+        }
+      });
+      let token = localStorage.getItem('jwt');
+      const toggleBtn = document.querySelector('.login__button');
+      //toggling login /logout button based on token
+      if (token) {
+        toggleBtn.textContent = 'Logout';
+        //document.querySelector('.user_name').textContent = localStorage.getItem('username')
+      } else {
+        toggleBtn.textContent = 'Login';
+      }
+
+      //if user want to logout clearing token from local storage
+      toggleBtn.addEventListener('click', () => {
+        const state = toggleBtn.textContent;
+        if (state == 'Logout') {
+          localStorage.clear('jwt');
+          toggleBtn.textContent = 'Login';
+        }
+      });
+
+      //to update selected files
+      inputFile.addEventListener('change', e => {
+        const filename = document.getElementById('filename');
+        const filesize = document.getElementById('filesize');
+        const filetype = document.getElementById('filetype');
+        //if file actully changed
+        if (inputFile.files.length > 0) {
+          const { name, size, type } = inputFile.files[0];
+          filename.textContent = `${name}`;
+          filesize.textContent = `${size} KB`;
+          filetype.textContent = `${type}`;
+          filename.style.color = 'green';
+          document.querySelector('.upload__ui').classList.add('hidden');
+          document.querySelector('.status__ui').classList.toggle('hidden');
+        } else {
+          filename.textContent = '';
+        }
+      });
+
+      const downloadBtn = document.querySelector('.download_button');
+      const downloadInput = document.querySelector('#input_download');
+      downloadBtn.addEventListener('click', async e => {
+        e.preventDefault();
+        try {
+          const code = downloadInput.value.trim();
+          if (!code) return alert('Please enter a code');
+
+          const token = localStorage.getItem('jwt');
+          const res = await fetch('http://localhost:3000/retrieve', {
+            method: 'POST',
+            headers: {
+              Authorization: `${token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ code }),
+          });
+
+          const data = await res.json();
+
+          //if file was not not on database
+          if (!data.file || !data.file.filename) {
+            alert('Invalid code or file not found!');
+            return;
+          }
+
+          const fileName = data.file.filename;
+          window.location.href = `http://localhost:3000/download/${fileName}`;
+        } catch (err) {
+          alert('An error occurred while downloading the file.');
+        }
+      });
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const newToken = urlParams.get('token');
+      // if(token){
+      // localStorage.setItem('jwt', token);
+      // }
+      if (newToken) {
+        toggleBtn.textContent = 'Logout';
+        localStorage.setItem('jwt', newToken);
+        window.location.href = '/';
+      }
+    </script>
+  </body>
+</html>
+
+<!-- Used all the logo's from https://www.freepik.com-->

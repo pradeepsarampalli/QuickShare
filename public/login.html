@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="img/data-sharing.png">
+    <title>Login | Quick Share</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: beige;
+        height: 100vh;
+        overflow: hidden;
+        margin: 0px;
+      }
+      .login {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: baseline;
+        padding: 20px;
+        width: 350px;
+        height: 340px;
+        border-radius: 10px;
+        background-color: #ccf3e0;
+      }
+      h1 {
+        color: rgb(64, 62, 62);
+        font-size: 40px;
+      }
+      .app-logo {
+        display: flex;
+        justify-content: left;
+        align-items: center;
+      }
+      .app-logo img {
+        width: 55px;
+        height: 50px;
+        margin-right: 5px;
+        border-radius: 10px;
+      }
+      .details {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        width: 95%;
+        justify-content: center;
+        align-items: center;
+      }
+      .details input {
+        height: 33px;
+        outline: none;
+        border: none;
+        border-bottom: 1px solid gray;
+        margin-top: 8px;
+        background-color: transparent;
+        margin-bottom: 10px;
+        align-self: flex-start;
+        width: 90%;
+      }
+      .details p {
+        font-size: 12px;
+      }
+      .details a {
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .details button {
+        font-size: 15px;
+        margin-top: 10px;
+        width: 80px;
+        padding: 5px 3px;
+        cursor: pointer;
+       background-color: #07c34f;
+        color: white;
+        border: none;
+        border-radius: 5px;
+      }
+      .no_account{
+        align-self: flex-start;
+      }
+      .more-options {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-left: 0px;
+      }
+      .more-options p {
+        margin: 0px;
+        margin-top: 10px;
+        font-size: 12px;
+      }
+      .more-options img {
+        width: 30px;
+        height: 30px;
+        margin-top: 10px;
+        margin-right: 20px;
+        cursor: pointer;
+      }
+      #login {
+        align-self: center;
+      }
+      .sign_with_google{
+        align-self: center;
+      }
+    .password__container {
+      position: relative;
+      width: 100%;
+    }
+
+.password__container input {
+  width: 90%;
+  padding-right: 10px;
+  box-sizing: border-box;
+}
+
+#show__password,
+#hide__password {
+  position: absolute;
+  right: 25px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+
+    </style>
+  </head>
+  <body>
+    <!-- <h1>Login</h1> -->
+    <form class="login">
+      <div class="app-logo">
+        <img src="img/data-sharing.png" alt="app-logo" />
+        <h2>Login</h2>
+      </div>
+      <div class="details">
+        <input type="text" id="email" placeholder="Enter your mail" />
+        <div class="password__container">
+        <input type="password" id="password" placeholder="Password" />
+        <img id="show__password" src="./img/show.png">
+        <img id="hide__password" src="./img/hide.png">
+        </div>
+        <p class="no_account">No account? <a href="signup.html">Sign up</a></p>
+        <button type="submit" id="login">Login</button>
+        <p>-------------- Or --------------</p>
+        <a class="sign_with_google" href="/auth/google">
+        <img src="https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png" />
+        </a>
+      </div>
+    </form>
+    <script>
+      const login = document.querySelector('#login');
+      login.addEventListener('click', async e => {
+        e.preventDefault();
+        const email = document.querySelector('#email').value;
+        const password = document.querySelector('#password').value;
+        try {
+          const res = await fetch('http://localhost:3000/user/login', {
+            method: 'POST',
+            headers: {
+              'Content-type': 'application/json',
+            },
+            body: JSON.stringify({
+              email,
+              password,
+            }),
+          });
+          const data = await res.json();
+          const token = data.token;
+          if (token) {
+            localStorage.setItem('jwt', token);
+            window.location.href = '/';
+          }
+        } catch (err) {
+          alert('Please check your credentials!')
+        }
+      });
+
+     document.querySelector('#show__password').addEventListener('click', () => {
+  password.type = 'text';
+  document.querySelector('#show__password').style.display = 'none';
+  document.querySelector('#hide__password').style.display = 'inline';
+});
+
+document.querySelector('#hide__password').addEventListener('click', () => {
+  password.type = 'password';
+  document.querySelector('#hide__password').style.display = 'none';
+  document.querySelector('#show__password').style.display = 'inline';
+});
+
+    </script>
+  </body>
+</html>
+
+
+
+<!-- ///client secret -- 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 -->

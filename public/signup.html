@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="img/data-sharing.png">
+    <title>Sign Up | Quick Share</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: beige;
+        height: 100vh;
+        overflow: hidden;
+        margin: 0px;
+      }
+      .signup {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: baseline;
+        padding: 20px;
+        width: 350px;
+        height: fit-content;
+        border-radius: 10px;
+        background-color: #ccf3e0;
+      }
+      h1 {
+        color: rgb(64, 62, 62);
+        font-size: 40px;
+      }
+      .app-logo {
+        display: flex;
+        justify-content: left;
+        align-items: center;
+      }
+      .app-logo img {
+        width: 55px;
+        height: 50px;
+        margin-right: 5px;
+        border-radius: 10px;
+      }
+      .details {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 95%;
+      }
+      .details input {
+        height: 33px;
+        outline: none;
+        width: 99%;
+        border: none;
+        border-bottom: 1px solid gray;
+        margin-top: 8px;
+        margin-bottom: 10px;
+        background-color: transparent;
+      }
+      .details p {
+        font-size: 12px;
+      }
+      .details a {
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .details button {
+        font-size: 15px;
+        margin-top: 10px;
+        width: 80px;
+        padding: 5px 3px;
+        cursor: pointer;
+        background-color: #2196f3;
+        color: white;
+        border: none;
+        border-radius: 5px;
+      }
+      .more-options {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-left: 0px;
+      }
+      .more-options p {
+        margin: 0px;
+        margin-top: 10px;
+        font-size: 12px;
+      }
+      .more-options img {
+        width: 30px;
+        height: 30px;
+        margin-top: 10px;
+        margin-right: 20px;
+        cursor: pointer;
+      }
+      a {
+        text-decoration: none;
+      }
+      #signup-btn {
+        align-self: center;
+        background-color: #07c34f;
+      }
+       .sign_with_google{
+        align-self: center;
+      }
+      .have_account{
+        align-self: flex-start;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <h1>Sign Up</h1> -->
+    <form id="signup-form" class="signup">
+      <div class="app-logo">
+        <img src="img/data-sharing.png" alt="app-logo" />
+        <h2>SignUp</h2>
+      </div>
+      <div class="details">
+        <input type="text" id="username" placeholder="Username" required />
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <input type="password" id="confirm-password" placeholder="Confirm Password" required />
+        <p class="have_account">Have an account? <a href="login.html">Login</a></p>
+        <button id="signup-btn" type="submit">Sign Up</button>
+        <p>-------------- Or --------------</p>
+        <a class="sign_with_google" href="/auth/google">
+        <img src="https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png" />
+        </a>
+      </div>
+    </form>
+
+    <script>
+      const signupBtn = document.querySelector('#signup-btn');
+      signupBtn.addEventListener('click', async e => {
+        e.preventDefault();
+        const username = document.querySelector('#username').value;
+        const email = document.querySelector('#email').value;
+        const password = document.querySelector('#password').value;
+        const confirmPassword = document.querySelector('#confirm-password').value;
+        try {
+          const res = await fetch('http://localhost:3000/user/signup', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              username,
+              email,
+              password,
+              confirmPassword,
+            }),
+          });
+
+          const data = await res.json();
+          const token = data.token;
+          // localStorage.setItem('jwt', token);
+
+          //logging user if he sucessfull signed up and token is generated
+          if (token) {
+            localStorage.setItem('jwt', token);
+            window.location.href = '/';
+          }
+        } catch (err) {
+          alert('Credentials error please check and try Again!')
+        }
+      });
+    </script>
+  </body>
+</html>
